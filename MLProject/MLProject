@@ -1,0 +1,11 @@
+name: iris-rul
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      n_estimators: {type: int, default: 10}
+      min_samples_split: {type: int, default: 5}
+      min_samples_leaf: {type: int, default: 1}
+    command: "python modelling_tuning.py --n_estimators {n_estimators} --min_samples_split {min_samples_split} --min_samples_leaf {min_samples_leaf}"
