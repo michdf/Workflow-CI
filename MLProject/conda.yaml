@@ -1,4 +1,4 @@
-name: iris-env
+name: titanic-env
 channels:
   - defaults
 dependencies:

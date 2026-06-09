@@ -16,13 +16,13 @@ def train_model(n_estimators, min_samples_split, min_samples_leaf):
     val_set = pd.read_csv("data_preprocessing/val.csv")
     test_set = pd.read_csv("data_preprocessing/test.csv")
 
-    X_train = train_set.drop(columns=["species"])
-    y_train = train_set["species"]
-    X_val = val_set.drop(columns=["species"])
-    y_val = val_set["species"]
-    X_test = test_set.drop(columns=["species"])
-    y_test = test_set["species"]
-
+    X_train = train_set.drop(columns=["Survived"])
+    y_train = train_set["Survived"]
+    X_val = val_set.drop(columns=["Survived"])
+    y_val = val_set["Survived"]
+    X_test = test_set.drop(columns=["Survived"])
+    y_test = test_set["Survived"]
+    
     with mlflow.start_run():
         mlflow.sklearn.autolog()
         model = LogisticRegression(max_iter=1000, random_state=42)
@@ -33,9 +33,9 @@ def train_model(n_estimators, min_samples_split, min_samples_leaf):
 
         # Metrics
         accuracy = accuracy_score(y_val, y_pred)
-        precision = precision_score(y_val, y_pred, average='weighted')
-        recall = recall_score(y_val, y_pred, average='weighted')
-        f1 = f1_score(y_val, y_pred, average='weighted')
+        precision = precision_score(y_val, y_pred, average='binary')
+        recall = recall_score(y_val, y_pred, average='binary')
+        f1 = f1_score(y_val, y_pred, average='binary')
 
         # Log metrics
         mlflow.log_metric("accuracy", accuracy)
@@ -47,9 +47,10 @@ def train_model(n_estimators, min_samples_split, min_samples_leaf):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_estimators", type=int, default=10)
-    parser.add_argument("--min_samples_split", type=int, default=5)
-    parser.add_argument("--min_samples_leaf", type=int, default=1)
+    parser.add_argument("--n_estimators", type=int, default=100)
+    parser.add_argument("--min_samples_split", type=int, default=2)
+    parser.add_argument("--min_samples_leaf", type=int, default=2)
+    parser.add_argument("--max_depth", type=int, default=10)
     args = parser.parse_args()
 
     train_model(args.n_estimators, args.min_samples_split, args.min_samples_leaf)

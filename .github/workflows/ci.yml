@@ -19,7 +19,7 @@ jobs:
         run: pip install mlflow==2.19.0 scikit-learn pandas numpy matplotlib
 
       - name: Run MLflow Project
-        run: mlflow run MLProject/ -P n_estimators=10 -P min_samples_split=5 -P min_samples_leaf=1 --env-manager=local
+        run: mlflow run MLProject/ -P n_estimators=100 -P min_samples_split=2 -P min_samples_leaf=2 -P max_depth=10 --env-manager=local
 
       - name: Verify artifacts exist
         run: ls -la mlruns/
@@ -55,11 +55,11 @@ jobs:
         run: |
           mlflow models build-docker \
             -m "runs:/${{ steps.get_run.outputs.run_id }}/model" \
-            -n "${{ secrets.DOCKERHUB_USERNAME }}/iris-mlops" \
+            -n "${{ secrets.DOCKERHUB_USERNAME }}/titanic-mlops" \
             --env-manager=local
 
       - name: Push to Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/iris-mlops
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/titanic-mlops
 
       - name: Save Docker Hub link
-        run: echo "https://hub.docker.com/r/${{ secrets.DOCKERHUB_USERNAME }}/iris-mlops" > MLProject/docker_hub_link.txt
+        run: echo "https://hub.docker.com/r/${{ secrets.DOCKERHUB_USERNAME }}/titanic-mlops" > MLProject/docker_hub_link.txt
